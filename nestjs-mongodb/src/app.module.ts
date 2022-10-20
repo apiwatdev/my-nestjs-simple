@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BookModule } from './book/book.module';
+
 import { BooksModule } from './books/books.module';
 
 @Module({
@@ -26,7 +26,6 @@ import { BooksModule } from './books/books.module';
         };
       },
     }),
-    BookModule,
     BooksModule,
   ],
   controllers: [AppController],
