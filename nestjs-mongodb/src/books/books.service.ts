@@ -9,8 +9,7 @@ export class BooksService {
 
   async getBooks(): Promise<Book[]> {
     const book1 = await this.bookRepository.find({});
-    const book2 = await this.bookRepository.find({});
-    return [...book1, ...book2];
+    return book1;
   }
 
   async getBookById(bookId: string): Promise<Book> {

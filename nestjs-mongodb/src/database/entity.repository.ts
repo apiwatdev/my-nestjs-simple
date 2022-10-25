@@ -1,4 +1,10 @@
-import { Document, FilterQuery, Model, UpdateQuery } from 'mongoose';
+import {
+  Document,
+  FilterQuery,
+  Model,
+  QueryOptions,
+  UpdateQuery,
+} from 'mongoose';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
@@ -6,28 +12,36 @@ export abstract class EntityRepository<T extends Document> {
   async findOne(
     entityFilterQuery: FilterQuery<T>,
     projection?: Record<string, unknown>,
-  ): Promise<T> {
-    return this.entityModel.findOne(entityFilterQuery, {
-      _id: 0,
-      __v: 0,
-      ...projection,
-    });
+  ): Promise<T | null> {
+    return this.entityModel
+      .findOne(entityFilterQuery, {
+        _id: 0,
+        __v: 0,
+        ...projection,
+      })
+      .exec();
   }
 
-  async find(entityFilterQuery: FilterQuery<T>): Promise<T[]> {
+  async find(entityFilterQuery: FilterQuery<T>): Promise<T[] | null> {
     return this.entityModel.find(entityFilterQuery);
   }
 
   async create(createEntityData: unknown): Promise<T> {
-    const newBook = new this.entityModel(createEntityData);
-    return newBook.save();
+    const entity = new this.entityModel(createEntityData);
+    return entity.save();
   }
 
   async findOneAndUpdate(
     entityFilterQuery: FilterQuery<T>,
-    editEntityData: UpdateQuery<unknown>,
-  ): Promise<T> {
-    return this.entityModel.findOneAndUpdate(entityFilterQuery, editEntityData);
+    updateEntityData: UpdateQuery<unknown>,
+  ): Promise<T | null> {
+    return this.entityModel.findOneAndUpdate(
+      entityFilterQuery,
+      updateEntityData,
+      {
+        new: true,
+      },
+    );
   }
 
   async deleteMany(entityFilterQuery: FilterQuery<T>): Promise<boolean> {
