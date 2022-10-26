@@ -22,7 +22,7 @@ export class BooksController {
   async createBook(@Body() createBookDto: CreateBookDto): Promise<Book> {
     return this.booksService.createBook(
       createBookDto.title,
-      createBookDto.pageTotal,
+      createBookDto.totalPage,
       createBookDto.edition,
     );
   }

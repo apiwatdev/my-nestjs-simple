@@ -1,5 +1,5 @@
 export class BookDto {
   title: string;
-  pageTotal: number;
+  totalPage: number;
   edition: number;
 }

@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 
 import { BooksModule } from '../src/books/books.module';
 import { UserModel } from './users/test/support/user.model';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -15,18 +16,7 @@ import { UserModel } from './users/test/support/user.model';
         process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''
       }`,
     }),
-    MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => {
-        const MONGODB_URL = config.get<string>('MONGODB_URL');
-        const MONGODB_USER = config.get<string>('MONGODB_USER');
-        const MONGODB_PASSWORD = config.get<string>('MONGODB_PASSWORD');
-        const uri = `mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}`;
-        return {
-          uri: uri,
-        };
-      },
-    }),
+    DatabaseModule,
     BooksModule,
     UserModel,
   ],
